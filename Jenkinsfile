@@ -35,7 +35,7 @@ pipeline {
             steps {
                 sh '''
                 docker build -t honey120ar/java-cicd-demo:latest .
-                docker push honey120ar/java-cicd-demo:latest
+                docker push honey120ar/java-cicd-demo
                 '''
             }
         }
