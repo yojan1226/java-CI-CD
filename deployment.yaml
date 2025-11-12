@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: java-cicd-demo
-          image: your-dockerhub-username/java-cicd-demo:latest
+          image: honey120ar/java-cicd-demo:latest
           ports:
             - containerPort: 8080
 ---
