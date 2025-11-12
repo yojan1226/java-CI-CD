@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-repo/java-cicd-demo.git'
+                git 'https://github.com/yojan1226/java-CI-CD.git'
             }
         }
 
@@ -34,16 +34,10 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 sh '''
-                docker build -t your-dockerhub-username/java-cicd-demo:latest .
-                docker push your-dockerhub-username/java-cicd-demo:latest
+                docker build -t honey120ar/java-cicd-demo:01 .
+                docker push honey120ar/java-cicd-demo:01
                 '''
             }
         }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh 'kubectl apply -f deployment.yaml'
-            }
-        }
     }
-}
+} 
