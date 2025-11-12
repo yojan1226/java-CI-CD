@@ -20,22 +20,22 @@ pipeline {
             }
         }
 
-        stage('Code Quality - SonarQube') {
-            environment {
-                SONARQUBE_URL = 'SonarQubeServer'
-            }
-            steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=java-cicd-demo'
-                }
-            }
-        }
+       //  stage('Code Quality - SonarQube') {
+       //     environment {
+       //         SONARQUBE_URL = 'SonarQubeServer'
+       //     }
+       //     steps {
+       //         withSonarQubeEnv('SonarQubeServer') {
+       //            sh 'mvn sonar:sonar -Dsonar.projectKey=java-cicd-demo'
+       //         }
+       //     }
+       // } 
 
         stage('Docker Build & Push') {
             steps {
                 sh '''
-                docker build -t honey120ar/java-cicd-demo:01 .
-                docker push honey120ar/java-cicd-demo:01
+                docker build -t honey120ar/java-cicd-demo:latest .
+                docker push honey120ar/java-cicd-demo:latest
                 '''
             }
         }
