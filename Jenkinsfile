@@ -33,11 +33,14 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                sh '''
-                docker build -t honey120ar/java-cicd-demo:latest .
-                docker push honey120ar/java-cicd-demo
-                '''
+                script {
+                    // Log in to Docker using Jenkins credentials
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+                        def customImage = docker.build("honey120ar/java-cicd-demo:latest")
+                        customImage.push()
+                    }
+                }
             }
         }
     }
-} 
+}
