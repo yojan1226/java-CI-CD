@@ -25,17 +25,6 @@ pipeline {
             }
         }
 
-        // stage('Code Quality - SonarQube') {
-        //     environment {
-        //         SONARQUBE_URL = 'SonarQubeServer'
-        //     }
-        //     steps {
-        //         withSonarQubeEnv('SonarQubeServer') {
-        //             sh 'mvn sonar:sonar -Dsonar.projectKey=java-cicd-demo'
-        //         }
-        //     }
-        // }
-
         stage('Docker Build & Push') {
             steps {
                 script {
@@ -49,11 +38,18 @@ pipeline {
 
         stage('Deploying on EC2 Minikube Cluster') {
             steps {
-                sh '''
-                    scp -o StrictHostKeyChecking=no deployment.yaml ubuntu@$MINIKUBE_IP:/home/ubuntu/
-                    ssh -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl delete -f /home/ubuntu/deployment.yaml --ignore-not-found=true"
-                    ssh -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl apply -f /home/ubuntu/deployment.yaml"
-                '''
+                withCredentials([sshUserPrivateKey(credentialsId: 'ec2-minikube-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        echo "Copying deployment file..."
+                        scp -i $SSH_KEY -o StrictHostKeyChecking=no deployment.yaml ubuntu@$MINIKUBE_IP:/home/ubuntu/
+
+                        echo "Deleting old deployment..."
+                        ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl delete -f /home/ubuntu/deployment.yaml --ignore-not-found=true"
+
+                        echo "Applying new deployment..."
+                        ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@$MINIKUBE_IP "kubectl apply -f /home/ubuntu/deployment.yaml"
+                    '''
+                }
             }
         }
 
