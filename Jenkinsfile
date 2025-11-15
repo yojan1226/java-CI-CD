@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        MINIKUBE_ip = '52.66.174.192' //PUBLIC IP
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -42,5 +46,14 @@ pipeline {
                 }
             }
         }
-    }
-}
+
+        stage('Deploying on EC2 Minikube Cluster') {
+            steps {
+                    sh 'scp deployment.yaml ubuntu@$MINIKUBE_IP:/home/ubuntu/'
+                    sh 'ssh ubuntu@$MINIKUBE_IP "kubectl delete -f /home/ubuntu/deployment.yaml --ignore-not-found=true"'
+                    sh 'ssh ubuntu@$MINIKUBE_IP "kubectl apply -f /home/ubuntu/deployment.yaml"'
+                }
+            }
+        }
+    } // stages
+} //pipeline
