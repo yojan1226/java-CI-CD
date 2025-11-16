@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: java-cicd-demo
-          image: honey120ar/java-cicd-demo:latest
+          image: priya123456/restapi:latest
           ports:
             - containerPort: 8080
 ---
