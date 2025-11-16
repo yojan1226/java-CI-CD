@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        MINIKUBE_IP = '52.66.174.192' // PUBLIC IP
+        MINIKUBE_IP = '13.235.19.72' // PUBLIC IP
     }
 
     stages {
